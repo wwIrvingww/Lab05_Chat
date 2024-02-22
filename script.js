@@ -14,12 +14,10 @@ const globalStyle = `
     }
 `;
 
-// Crear un elemento de estilo y agregarlo al head
 const styleElement = document.createElement('style');
 styleElement.textContent = globalStyle;
 document.head.appendChild(styleElement);
 
-// Crear el div global
 let globalDiv = document.createElement('div');
 globalDiv.id = 'global';
 globalDiv.className = 'global';
@@ -30,7 +28,6 @@ document.body.appendChild(globalDiv);
  * Primera columna 
  */
 
-// Estilo para la columna izquierda
 const column1style = `
     #left {
         background-color: white;
@@ -41,15 +38,14 @@ const column1style = `
     }
 `;
 
-// Crear un elemento de estilo y agregarlo al head
+
 const styleColumn1 = document.createElement('style');
 styleColumn1.textContent = column1style;
 document.head.appendChild(styleColumn1);
 
-// Crear la columna izquierda
 let divLeft = document.createElement('div');
 divLeft.id = 'left';
-divLeft.className = 'left'; // Puedes agregar una clase si lo prefieres
+divLeft.className = 'left'; 
 document.body.appendChild(divLeft);
 
 
@@ -57,27 +53,26 @@ document.body.appendChild(divLeft);
  * Primera fila 
  */
 
-// Estilo para la fila inferior izquierda
 const row1style = `
     #leftBottom {
         background-color: black;
-        width: 22.5vw; /* Ancho deseado */
-        height: 12.5vh; /* Altura deseada */
-        position: fixed; /* Para fijar la fila incluso al hacer scroll */
-        bottom: 0; /* Alineado en la parte inferior */
-        left: 0; /* Alineado a la izquierda */
+        width: 22.5vw; 
+        height: 12.5vh; 
+        position: fixed; 
+        bottom: 0; 
+        left: 0; 
     }
 `;
 
-// Crear un elemento de estilo y agregarlo al head
+
 const stylerow1 = document.createElement('style');
 stylerow1.textContent = row1style;
 document.head.appendChild(stylerow1);
 
-// Crear la fila inferior izquierda
+
 let divLeftBottom = document.createElement('div');
 divLeftBottom.id = 'leftBottom';
-divLeftBottom.className = 'leftBottom'; // Puedes agregar una clase si lo prefieres
+divLeftBottom.className = 'leftBottom'; 
 document.body.appendChild(divLeftBottom);
 
 
@@ -85,27 +80,24 @@ document.body.appendChild(divLeftBottom);
  * Primera fila 
  */
 
-// Estilo para la fila inferior derecha
 const row2style = `
     #RightBottom {
         background-color: orange;
-        width: 77.5vw; /* Ancho deseado */
-        height: 12.5vh; /* Altura deseada */
-        position: fixed; /* Para fijar la fila incluso al hacer scroll */
-        bottom: 0; /* Alineado en la parte inferior */
-        right: 0; /* Alineado a la derecha */
+        width: 77.5vw; 
+        height: 12.5vh; 
+        position: fixed; 
+        bottom: 0; 
+        right: 0; 
     }
 `;
 
-// Crear un elemento de estilo y agregarlo al head
 const stylerow2 = document.createElement('style');
 stylerow2.textContent = row2style;
 document.head.appendChild(stylerow2);
 
-// Crear la fila inferior derecha
 let divRightBottom = document.createElement('div');
 divRightBottom.id = 'RightBottom';
-divRightBottom.className = 'RightBottom'; // Corregir el nombre de la clase aquí
+divRightBottom.className = 'RightBottom'; 
 document.body.appendChild(divRightBottom);
 
 
@@ -137,6 +129,112 @@ divLeftBottom.appendChild(imageProfile);
  * Crear nombre
  */
 
+const fontLink = document.createElement('link');
+fontLink.href = 'https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap';
+fontLink.rel = 'stylesheet';
+document.head.appendChild(fontLink);
 
-const nameStyle
+const nameStyle = `
+    #name {
+        position: absolute;
+        right: 20%; 
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 4vw; 
+        color: white;
+        font-family: 'Manrope', sans-serif;
+    }
+`;
+let styleName = document.createElement('style');
+styleName.textContent = nameStyle;
+document.head.appendChild(styleName);
+
+let nameProfile = document.createElement('text');
+nameProfile.id = 'name';
+nameProfile.className = 'name';
+nameProfile.textContent = 'Irving'
+
+divLeftBottom.appendChild(nameProfile);
+
+/**
+ * Crear campo de texto
+ */
+
+// Estilo para el campo de texto
+const fieldTextStyle = `
+    #fieldMessage {
+        position: relative;
+        width: 90%; 
+        height: 100%;
+        font-size: 2vw;
+        background-color: transparent; 
+        border: none; 
+        color: white;
+        resize: none; 
+        outline: none; 
+        overflow-y: scroll;
+    }
+    .fieldMessage::-webkit-scrollbar {
+        display: none;
+    }
+
+    #fieldMessage::placeholder {
+        color: rgba(255, 255, 255, 0.5); 
+    }
+`;
+
+let styleFieldText = document.createElement('style');
+styleFieldText.textContent = fieldTextStyle;
+document.head.appendChild(styleFieldText);
+
+let fieldMessage = document.createElement('textarea');
+fieldMessage.id = 'fieldMessage';
+fieldMessage.className = 'fieldMessage';
+fieldMessage.placeholder = 'Type a message'; 
+
+divRightBottom.appendChild(fieldMessage);
+
+
+/**
+ * Crear boton para enviar men
+ */
+const fontAwesomeLink = document.createElement('link');
+fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css';
+fontAwesomeLink.rel = 'stylesheet';
+document.head.appendChild(fontAwesomeLink);
+
+// Estilo para el botón de enviar
+const sendButtonStyle = `
+    #sendButton {
+        position: absolute;
+        width: 10%;
+        height: 100%;
+        right: 0;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        font-size: 2vw; 
+    }
+`;
+
+let styleSendButton = document.createElement('style');
+styleSendButton.textContent = sendButtonStyle;
+document.head.appendChild(styleSendButton);
+
+let sendButton = document.createElement('button');
+sendButton.id = 'sendButton';
+sendButton.className = 'sendButton';
+
+sendButton.innerHTML = '<i class="fas fa-arrow-right"></i>';
+divRightBottom.appendChild(sendButton);
+
+//EVENTO
+sendButton.addEventListener('click', function() {
+    // accion dummie
+    console.log('Botón de enviar clickeado');
+});
+
+
+
+
 
