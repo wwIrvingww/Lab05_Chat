@@ -1,117 +1,17 @@
 // NODO RAIZ
 const DOM = document;
-
-/**
- * BAKCGROUND
- */
-
-// Crear el estilo global
-const globalStyle = `
-    body {
-        background-color: #6096B4;
-        margin: 0; /* Elimina el margen predeterminado del body */
-        padding: 0; /* Elimina el relleno predeterminado del body */
-    }
-`;
-
-const styleElement = document.createElement('style');
-styleElement.textContent = globalStyle;
-document.head.appendChild(styleElement);
-
-let globalDiv = document.createElement('div');
-globalDiv.id = 'global';
-globalDiv.className = 'global';
-document.body.appendChild(globalDiv);
-
-
-/**
- * Primera columna 
- */
-
-const column1style = `
-    #left {
-        background-color: white;
-        width: 22.5vw; /* Ancho deseado */
-        height: 100vh; /* Altura igual a la altura de la página */
-        position: fixed; /* Para fijar la columna incluso al hacer scroll */
-        left: 0; /* Alineado a la izquierda */
-    }
-`;
-
-
-const styleColumn1 = document.createElement('style');
-styleColumn1.textContent = column1style;
-document.head.appendChild(styleColumn1);
-
-let divLeft = document.createElement('div');
-divLeft.id = 'left';
-divLeft.className = 'left'; 
-document.body.appendChild(divLeft);
-
-
-/**
- * Primera fila 
- */
-
-const row1style = `
-    #leftBottom {
-        background-color: black;
-        width: 22.5vw; 
-        height: 12.5vh; 
-        position: fixed; 
-        bottom: 0; 
-        left: 0; 
-    }
-`;
-
-
-const stylerow1 = document.createElement('style');
-stylerow1.textContent = row1style;
-document.head.appendChild(stylerow1);
-
-
-let divLeftBottom = document.createElement('div');
-divLeftBottom.id = 'leftBottom';
-divLeftBottom.className = 'leftBottom'; 
-document.body.appendChild(divLeftBottom);
-
-
-/**
- * Primera fila 
- */
-
-const row2style = `
-    #RightBottom {
-        background-color: orange;
-        width: 77.5vw; 
-        height: 12.5vh; 
-        position: fixed; 
-        bottom: 0; 
-        right: 0; 
-    }
-`;
-
-const stylerow2 = document.createElement('style');
-stylerow2.textContent = row2style;
-document.head.appendChild(stylerow2);
-
-let divRightBottom = document.createElement('div');
-divRightBottom.id = 'RightBottom';
-divRightBottom.className = 'RightBottom'; 
-document.body.appendChild(divRightBottom);
-
+document.body.style.margin = '0'
+document.body.style.padding = '0'
+document.body.boxSizing = 'border-box'
 
 /**
  * Crear imagen
  */
 const imageStyle = `
     #image {
-        border-radius: 50%;
-        left: 1vw;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 5vw;
-        position: relative;
+        width: 80px; 
+        height: 80px; 
+        border-radius: 50%;       
     }
 `;
 const styleImage = document.createElement('style');
@@ -123,7 +23,7 @@ imageProfile.id = 'image';
 imageProfile.className = 'image';
 imageProfile.src = 'https://i.pinimg.com/564x/9e/09/36/9e0936526da3f3c29d8ecf250cffed1d.jpg';
 
-divLeftBottom.appendChild(imageProfile);
+//divLeftBottom.appendChild(imageProfile);
 
 /**
  * Crear nombre
@@ -135,14 +35,20 @@ fontLink.rel = 'stylesheet';
 document.head.appendChild(fontLink);
 
 const nameStyle = `
+    #name-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50%; /* Ajusta la altura según tus necesidades */
+    }
+
     #name {
-        position: absolute;
-        right: 20%; 
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 4vw; 
+        text-align: end;
+        margin-left: 3ch;
+        font-size: 25px; 
         color: white;
         font-family: 'Manrope', sans-serif;
+        scroll: hide;
     }
 `;
 let styleName = document.createElement('style');
@@ -154,7 +60,7 @@ nameProfile.id = 'name';
 nameProfile.className = 'name';
 nameProfile.textContent = 'Irving'
 
-divLeftBottom.appendChild(nameProfile);
+//divLeftBottom.appendChild(nameProfile);
 
 /**
  * Crear campo de texto
@@ -163,16 +69,18 @@ divLeftBottom.appendChild(nameProfile);
 // Estilo para el campo de texto
 const fieldTextStyle = `
     #fieldMessage {
-        position: relative;
-        width: 90%; 
+        
+        width: 100%; 
         height: 100%;
-        font-size: 2vw;
+        font-size: 24px;
         background-color: transparent; 
         border: none; 
         color: white;
         resize: none; 
         outline: none; 
         overflow-y: scroll;
+        padding: 0;
+        margin: 0;
     }
     .fieldMessage::-webkit-scrollbar {
         display: none;
@@ -188,15 +96,16 @@ styleFieldText.textContent = fieldTextStyle;
 document.head.appendChild(styleFieldText);
 
 let fieldMessage = document.createElement('textarea');
+fieldMessage.setAttribute("maxlength","140");
 fieldMessage.id = 'fieldMessage';
 fieldMessage.className = 'fieldMessage';
 fieldMessage.placeholder = 'Type a message'; 
 
-divRightBottom.appendChild(fieldMessage);
+//divRightBottom.appendChild(fieldMessage);
 
 
 /**
- * Crear boton para enviar men
+ * Crear boton para enviar mensajes
  */
 const fontAwesomeLink = document.createElement('link');
 fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css';
@@ -205,15 +114,15 @@ document.head.appendChild(fontAwesomeLink);
 
 // Estilo para el botón de enviar
 const sendButtonStyle = `
-    #sendButton {
-        position: absolute;
-        width: 10%;
+    #sendButton {     
+        width: 100%;
         height: 100%;
-        right: 0;
         background-color: transparent;
         border: none;
         outline: none;
-        font-size: 2vw; 
+        font-size: 50px; 
+        color: white;
+    
     }
 `;
 
@@ -221,18 +130,131 @@ let styleSendButton = document.createElement('style');
 styleSendButton.textContent = sendButtonStyle;
 document.head.appendChild(styleSendButton);
 
-let sendButton = document.createElement('button');
+const sendButton = document.createElement('button');
 sendButton.id = 'sendButton';
 sendButton.className = 'sendButton';
 
 sendButton.innerHTML = '<i class="fas fa-arrow-right"></i>';
-divRightBottom.appendChild(sendButton);
+//divRightBottom.appendChild(sendButton);
+
+
+const mainContainer = document.createElement('main');
+mainContainer.style.background = 'green'
+mainContainer.style.height = '98dvh'
+mainContainer.style.display = 'flex';
+mainContainer.style.flexDirection = 'column'
+
+
+
+document.body.appendChild(mainContainer)
+
+const upperContainer = document.createElement('div');
+upperContainer.style.backgroundColor = 'blue'
+upperContainer.style.flexGrow = '1'
+upperContainer.style.flexBasis = '0'
+mainContainer.appendChild(upperContainer)
+
+const downContainer = document.createElement('div');
+downContainer.style.backgroundColor = 'red'
+downContainer.style.height = '100px'
+mainContainer.appendChild(downContainer)
+
+upperContainer.style.display = 'flex'
+upperContainer.style.flexDirection = 'row'
+
+const leftContainer = document.createElement('div')
+leftContainer.style.backgroundColor = '#1B1A55'
+leftContainer.style.height = '100%'
+leftContainer.style.width = '300px'
+upperContainer.appendChild(leftContainer)
+
+const rightContainer = document.createElement('div')
+rightContainer.style.background = '#535C91'
+rightContainer.style.flexGrow = '1'
+rightContainer.style.flexBasis = '0'
+upperContainer.appendChild(rightContainer)
+
+
+downContainer.style.display = 'flex'
+downContainer.style.flexDirection = 'row'
+
+const profile = document.createElement('div')
+profile.style.backgroundColor = '#070F2B'
+profile.style.alignItems = 'center'
+profile.style.height = '100%'
+profile.style.width = '300px'
+downContainer.appendChild(profile)
+
+const field = document.createElement('div')
+field.style.backgroundColor = '#9290C3'
+field.style.height = '100%' 
+field.style.flexGrow = '1'
+field.style.flexBasis = '0'
+downContainer.appendChild(field)
+
+
+
+
+const send  = document.createElement('div')
+
+send.style.height = '100%'
+send.style.width = '150px'
+send.style.backgroundColor = '#9290C3'
+downContainer.appendChild(send)
+
+profile.appendChild(imageProfile)
+profile.appendChild(nameProfile)
+
+send.appendChild(sendButton)
+
+field.appendChild(fieldMessage)
 
 //EVENTO
-sendButton.addEventListener('click', function() {
-    // accion dummie
-    console.log('Botón de enviar clickeado');
+send.addEventListener('click', function() {
+    sendMessage();
+    fieldMessage.value = '';
+})
+;
+
+field.addEventListener('keydown', function(event){
+    if(event.keyCode == 13){
+        event.preventDefault();
+        sendMessage();
+        fieldMessage.value = '';
+    }
 });
+
+
+
+
+
+function sendMessage(){
+    let mensajeValue = document.getElementById('fieldMessage').value;
+    console.log(mensajeValue);
+    ///console.log(mensajeValue);
+    let divMensajeContenedor = DOM.createElement("div");
+    divMensajeContenedor.style.backgroundColor = '#474F7A';
+    divMensajeContenedor.style.width = "350px";
+    divMensajeContenedor.style.minHeight = "60px";
+    divMensajeContenedor.style.borderRadius = "15px";
+    
+  
+    divMensajeContenedor.style.marginBottom = "8px";
+    divMensajeContenedor.style.flexDirection = "column";
+
+
+    let info = document.createElement("h4");
+    divMensajeContenedor.innerHTML = mensajeValue;
+    info.style.alignItems = "right";
+    divMensajeContenedor.style.padding = "10px";
+    info.style.fontSize= "20px" ;
+    info.style.color = 'white';
+
+    rightContainer.style.alignContent = 'end'
+    rightContainer.appendChild(divMensajeContenedor);
+    rightContainer.style.alignContent = 'end';
+
+}
 
 
 
