@@ -131,6 +131,8 @@ document.head.appendChild(styleFieldText);
 
 let fieldMessage = document.createElement('textarea');
 fieldMessage.setAttribute("maxlength","140");
+fieldMessage.style.letterSpacing = '0.005em';
+fieldMessage.style.wordSpacing = '0.05em'
 fieldMessage.style.marginLeft = '50px'
 fieldMessage.id = 'fieldMessage';
 fieldMessage.className = 'fieldMessage';
@@ -197,11 +199,26 @@ nameGroup.style.color = 'white'
 nameGroup.style.fontSize = '100px'
 nameGroup.style.fontWeight = 'bold'
 nameGroup.textContent = 'CHAT'
+nameGroup.style.marginLeft = '15px'
 nameGroup.style.fontFamily = 'Manrope'
 
 leftContainer.style.display = 'flex'
-leftContainer.style.justifyContent = 'center'
+leftContainer.style.flexDirection = 'column'
+leftContainer.style.alignItems = 'flex-start' // Align to the left
 leftContainer.appendChild(nameGroup)
+
+const userContainer = document.createElement('text')
+userContainer.style.width = '240px'
+userContainer.style.borderRadius = '15px'
+userContainer.style.padding = '20px'
+userContainer.style.marginTop = '20px'
+userContainer.style.marginLeft = '10px'
+userContainer.textContent = 'MAFER'
+userContainer.style.display = 'flex'
+userContainer.style.backgroundColor = '#4B527E'
+leftContainer.appendChild(userContainer)
+
+
 
 
 
@@ -266,14 +283,17 @@ function sendMessage() {
     let mensaje = document.createElement("div");
     mensaje.style.backgroundColor = '#474F7A';
     mensaje.style.display = 'inline-block';
-    mensaje.style.marginTop = '10px';
-    mensaje.style.marginRight = '20PX';
+    mensaje.style.marginTop = '15px';
+    mensaje.style.marginRight = '20pX';
     mensaje.style.padding = '5px';
     mensaje.style.borderRadius = '15px';
 
     let info = document.createElement("h4");
     info.textContent = mensajeValue;
+    info.style.fontFamily = 'Manrope';
     info.style.fontSize = "20px";
+    info.style.letterSpacing = '0.005em';
+    info.style.wordSpacing = '0.05em'
     info.style.color = 'white';
 
     mensaje.appendChild(info);
@@ -282,4 +302,16 @@ function sendMessage() {
 
     // Hacer scroll hacia abajo automáticamente
     rightContainer.scrollTop = rightContainer.scrollHeight;
+}
+
+//---------------------------------------------------//
+//----------FUNCION PARA GENERAR LOS NOMBRES DE USUARIOS -------------//
+function createUser (){
+    const userContainer = document.createElement('div')
+    userContainer.style.width = '100%'
+    userContainer.style.height = '20px'
+    userContainer.style.backgroundColor = '#4B527E'
+
+    leftContainer.appendChild(userContainer)
+
 }
