@@ -5,7 +5,7 @@ const DOM = document;
 //----------CONFIGURACION BODY-----------//
 document.body.style.margin = '0'
 document.body.style.padding = '0'
-document.body.boxSizing = 'border-box'
+document.body.style.boxSizing = 'border-box';
 
 //---------------------------------------------------//
 //----------CONFIGURACION MAIN CONTAINER-------------//
@@ -39,12 +39,8 @@ mainContainer.appendChild(downContainer)
 //----------CONFIGURACION PERFIL AREA-------------//
 const profile = document.createElement('div')
 profile.style.backgroundColor = '#070F2B'
-profile.style.display = 'flex'
-profile.style.flexDirection = 'column'
 profile.style.height = '100%'
 profile.style.width = '300px'
-profile.style.textAlign = 'right'
-profile.style.justifyContent = 'center'
 
 downContainer.appendChild(profile)
 
@@ -62,9 +58,9 @@ const nameStyle = `
 
     #name {
         float: right;
-        margin-right: 3ch;
-        margin-top: 2ch;
-        font-size: 25px; 
+        margin-right: 1ch;
+        margin-top: 30px;
+        font-size: 35px; 
         color: white;
         font-family: 'Manrope', sans-serif;
         // scroll: hide;
@@ -86,14 +82,15 @@ profile.appendChild(nameProfile)
  */
 const imageStyle = `
     #image {
-        width: 0;
-        margin: auto;
-        display: block;
-        justify-content: left;
-        align: center;
-        width: 80px; 
-        height: 100%;
+        float: right;
+        margin-right: 100px;
+        //width: 0;
+        //margin: auto;
+        //display: block;
+        width: auto; 
+        height: 80px;
         border-radius: 50%;     
+        margin-top: 10px;
     }
 `;
 const styleImage = document.createElement('style');
@@ -110,7 +107,7 @@ profile.appendChild(imageProfile)
 //----------CONFIGURACION ESCRIBIR MENSAJE AREA-------------//
 const fieldTextStyle = `
     #fieldMessage {
-        width: 1500px; 
+        width: 100%; 
         height: auto;
         font-size: 24px;
         background-color: transparent; 
@@ -142,10 +139,10 @@ fieldMessage.placeholder = 'Type a message';
 
 const field = document.createElement('div')
 field.style.backgroundColor = '#9290C3'
-field.style.height = 'auto' 
+field.style.height = '100%' 
 field.style.display = 'flex'
 field.style.flexGrow = '1'
-field.style.flexBasis = 'auto'
+field.style.flexBasis = '0'
 field.appendChild(fieldMessage)
 downContainer.appendChild(field)
 
@@ -198,23 +195,48 @@ upperContainer.appendChild(leftContainer)
 const nameGroup = document.createElement('text')
 nameGroup.style.color = 'white'
 nameGroup.style.fontSize = '100px'
+nameGroup.style.fontWeight = 'bold'
 nameGroup.textContent = 'CHAT'
-leftContainer.style.alignItems = 'center'
+nameGroup.style.fontFamily = 'Manrope'
+
+leftContainer.style.display = 'flex'
+leftContainer.style.justifyContent = 'center'
 leftContainer.appendChild(nameGroup)
+
 
 
 
 //---------------------------------------------------//
 //----------CONFIGURACION CONTAINER LATERAL DERECHO SUPERIOR-------------//
-const rightContainer = document.createElement('div')
-rightContainer.style.background = '#535C91'
-rightContainer.style.display = 'flex'
-rightContainer.style.flexGrow = '1'
-rightContainer.style.flexBasis = '0'
-rightContainer.style.flexDirection = 'column'
-rightContainer.style.alignItems = 'flex-end'
-rightContainer.style.overflowY = 'auto'
-upperContainer.appendChild(rightContainer)
+
+const scrollBarStyle = `
+    #scrollBar {
+        overflow-y: scroll;
+    }
+    #scrollBar::-webkit-scrollbar {
+        display: none;
+    }
+`;
+
+// Agregar estilo al head
+let styleScrollBar = document.createElement('style');
+styleScrollBar.textContent = scrollBarStyle;
+document.head.appendChild(styleScrollBar);
+
+const rightContainer = document.createElement('div');
+rightContainer.style.background = '#535C91';
+rightContainer.style.display = 'flex';
+rightContainer.style.flexGrow = '1';
+rightContainer.style.flexBasis = '0';
+rightContainer.style.flexDirection = 'column';
+rightContainer.style.alignItems = 'flex-end'; 
+rightContainer.id = 'scrollBar';  // Asegúrate de que el contenedor tenga el id 'scrollBar'
+rightContainer.style.overflowY = 'scroll';  // Aplica overflow-y: scroll directamente al contenedor
+rightContainer.style.overflowY = 'auto'; // Hacer el contenedor scrollable
+rightContainer.style.maxHeight = '950px'; // Establecer una altura máxima fija
+
+upperContainer.appendChild(rightContainer);
+
 
 
 
@@ -238,23 +260,26 @@ field.addEventListener('keydown', function(event){
 
 //---------------------------------------------------//
 //----------FUNCION PARA ENVIAR MENSAJES-------------//
-function sendMessage(){
+function sendMessage() {
     let mensajeValue = document.getElementById('fieldMessage').value;
 
     let mensaje = document.createElement("div");
     mensaje.style.backgroundColor = '#474F7A';
-    mensaje.style.display = 'inline-block'
-    mensaje.style.marginTop = '10px'
-    mensaje.style.marginRight = '20PX'
-    mensaje.style.padding = '5px'
-    mensaje.style.borderRadius = '15px'
+    mensaje.style.display = 'inline-block';
+    mensaje.style.marginTop = '10px';
+    mensaje.style.marginRight = '20PX';
+    mensaje.style.padding = '5px';
+    mensaje.style.borderRadius = '15px';
 
     let info = document.createElement("h4");
-    info.textContent = mensajeValue; // Use textContent for better performance and security
-    info.style.fontSize= "20px" ;
+    info.textContent = mensajeValue;
+    info.style.fontSize = "20px";
     info.style.color = 'white';
 
-    mensaje.appendChild(info); // Add the h4 element to the div
+    mensaje.appendChild(info);
 
     rightContainer.appendChild(mensaje);
+
+    // Hacer scroll hacia abajo automáticamente
+    rightContainer.scrollTop = rightContainer.scrollHeight;
 }
