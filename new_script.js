@@ -21,10 +21,9 @@ document.body.appendChild(mainContainer)
 //----------CONFIGURACION PARTE DE ARRIBA-------------//
 const upperContainer = document.createElement('div');
 upperContainer.style.backgroundColor = 'blue'
-upperContainer.style.minHeight = '100%'
+upperContainer.style.display = 'flex'
 upperContainer.style.flexGrow = '1'
 upperContainer.style.flexBasis = '0'
-upperContainer.style.display = 'flex'
 upperContainer.style.flexDirection = 'row'
 mainContainer.appendChild(upperContainer)
 
@@ -40,9 +39,13 @@ mainContainer.appendChild(downContainer)
 //----------CONFIGURACION PERFIL AREA-------------//
 const profile = document.createElement('div')
 profile.style.backgroundColor = '#070F2B'
-profile.style.alignItems = 'center'
+profile.style.display = 'flex'
+profile.style.flexDirection = 'column'
 profile.style.height = '100%'
 profile.style.width = '300px'
+profile.style.textAlign = 'right'
+profile.style.justifyContent = 'center'
+
 downContainer.appendChild(profile)
 
 //NOMBRE DE PERFIL
@@ -53,15 +56,14 @@ document.head.appendChild(fontLink);
 
 const nameStyle = `
     #name-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 50%; /* Ajusta la altura según tus necesidades */
+        float: right;
+        height: 50px; /* Ajusta la altura según tus necesidades */
     }
 
     #name {
-        text-align: end;
-        margin-left: 3ch;
+        float: right;
+        margin-right: 3ch;
+        margin-top: 2ch;
         font-size: 25px; 
         color: white;
         font-family: 'Manrope', sans-serif;
@@ -76,8 +78,33 @@ let nameProfile = document.createElement('text');
 nameProfile.id = 'name';
 nameProfile.className = 'name';
 nameProfile.textContent = 'Irving'
-
 profile.appendChild(nameProfile)
+
+//FOTO DE PERFIL 
+/**
+ * Crear imagen
+ */
+const imageStyle = `
+    #image {
+        width: 0;
+        margin: auto;
+        display: block;
+        justify-content: left;
+        align: center;
+        width: 80px; 
+        height: 100%;
+        border-radius: 50%;     
+    }
+`;
+const styleImage = document.createElement('style');
+styleImage.textContent = imageStyle;
+document.head.appendChild(styleImage);
+
+let imageProfile = document.createElement('img');
+imageProfile.id = 'image';
+imageProfile.className = 'image';
+imageProfile.src = 'https://i.pinimg.com/564x/9e/09/36/9e0936526da3f3c29d8ecf250cffed1d.jpg';
+profile.appendChild(imageProfile)
 
 
 //----------CONFIGURACION ESCRIBIR MENSAJE AREA-------------//
@@ -115,9 +142,10 @@ fieldMessage.placeholder = 'Type a message';
 
 const field = document.createElement('div')
 field.style.backgroundColor = '#9290C3'
-field.style.height = '100%' 
+field.style.height = 'auto' 
+field.style.display = 'flex'
 field.style.flexGrow = '1'
-field.style.flexBasis = '0'
+field.style.flexBasis = 'auto'
 field.appendChild(fieldMessage)
 downContainer.appendChild(field)
 
@@ -167,15 +195,66 @@ leftContainer.style.height = '100%'
 leftContainer.style.width = '300px'
 upperContainer.appendChild(leftContainer)
 
+const nameGroup = document.createElement('text')
+nameGroup.style.color = 'white'
+nameGroup.style.fontSize = '100px'
+nameGroup.textContent = 'CHAT'
+leftContainer.style.alignItems = 'center'
+leftContainer.appendChild(nameGroup)
+
+
 
 //---------------------------------------------------//
 //----------CONFIGURACION CONTAINER LATERAL DERECHO SUPERIOR-------------//
 const rightContainer = document.createElement('div')
 rightContainer.style.background = '#535C91'
+rightContainer.style.display = 'flex'
 rightContainer.style.flexGrow = '1'
 rightContainer.style.flexBasis = '0'
-rightContainer.style.display = 'flex'
 rightContainer.style.flexDirection = 'column'
 rightContainer.style.alignItems = 'flex-end'
 rightContainer.style.overflowY = 'auto'
 upperContainer.appendChild(rightContainer)
+
+
+
+
+
+//---------------------------------------------------//
+//----------CONFIGURACION PARA ENVIAR LA FUNCION-------------//
+send.addEventListener('click', function() {
+    sendMessage();
+    fieldMessage.value = '';
+})
+;
+
+field.addEventListener('keydown', function(event){
+    if(event.keyCode == 13){
+        event.preventDefault();
+        sendMessage();
+        fieldMessage.value = '';
+    }
+});
+
+//---------------------------------------------------//
+//----------FUNCION PARA ENVIAR MENSAJES-------------//
+function sendMessage(){
+    let mensajeValue = document.getElementById('fieldMessage').value;
+
+    let mensaje = document.createElement("div");
+    mensaje.style.backgroundColor = '#474F7A';
+    mensaje.style.display = 'inline-block'
+    mensaje.style.marginTop = '10px'
+    mensaje.style.marginRight = '20PX'
+    mensaje.style.padding = '5px'
+    mensaje.style.borderRadius = '15px'
+
+    let info = document.createElement("h4");
+    info.textContent = mensajeValue; // Use textContent for better performance and security
+    info.style.fontSize= "20px" ;
+    info.style.color = 'white';
+
+    mensaje.appendChild(info); // Add the h4 element to the div
+
+    rightContainer.appendChild(mensaje);
+}
