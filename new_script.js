@@ -327,12 +327,14 @@ function createUserContainer(usuario) {
     const userContainer = document.createElement('div')
     userContainer.style.width = '235px'
     userContainer.style.padding = '15px'
+    userContainer.style.marginBottom = '5px'
     userContainer.style.marginTop = '5px'
     userContainer.style.marginLeft = '15px'
     userContainer.style.color = 'white'
     userContainer.style.fontFamily = 'Manrope'
     userContainer.textContent = usuario
     userContainer.style.display = 'flex'
+    userContainer.style.fontSize = '25px'
     userContainer.style.backgroundColor = '#4B527E'
     containerU.appendChild(userContainer) //linea a cambiar
   }
@@ -371,26 +373,43 @@ function receiveMessage(messageValue) {
     let mensaje = document.createElement("div");
     mensaje.style.backgroundColor = '#474F7A';
     mensaje.style.display = 'inline-block';
-    mensaje.style.marginTop = '15px';
-    mensaje.style.marginRight = '20pX';
+    mensaje.style.marginTop = '10px';
+    mensaje.style.marginBottom = '15px'
+    mensaje.style.marginRight = '20px';
     mensaje.style.padding = '5px';
     mensaje.style.borderRadius = '15px';
 
     let info = document.createElement("h4");
-    info.textContent = messageValue;
     info.style.fontFamily = 'Manrope';
     info.style.fontSize = "20px";
     info.style.letterSpacing = '0.005em';
     info.style.wordSpacing = '0.05em';
     info.style.color = 'white';
 
-    mensaje.appendChild(info);
+    // Detectar enlaces a imágenes y crear vista previa
+    if (isImageLink(messageValue)) {
+        let imgPreview = document.createElement("img");
+        imgPreview.src = messageValue;
+        imgPreview.style.maxWidth = '100%';
+        mensaje.appendChild(imgPreview);
+    } else {
+        info.textContent = messageValue;
+        mensaje.appendChild(info);
+    }
 
     rightContainer.appendChild(mensaje);
 
     // Hacer scroll hacia abajo automáticamente
     rightContainer.scrollTop = rightContainer.scrollHeight;
 }
+
+// Función para verificar si una cadena es un enlace a una imagen
+function isImageLink(text) {
+    // Expresión regular para verificar si es un enlace a una imagen
+    const imageLinkRegex = /\.(jpeg|jpg|gif|png|bmp)$/i;
+    return imageLinkRegex.test(text);
+}
+
 
 // Función para obtener mensajes de la API y mostrarlos en el rightContainer
 async function displayMessagesFromAPI() {
@@ -410,6 +429,7 @@ async function displayMessagesFromAPI() {
         console.error('Error al obtener los mensajes desde la API:', error);
     }
 }
+
 
 // Función para obtener usuarios de la API y mostrarlos en el leftContainer
 async function displayUsersFromAPI() {
