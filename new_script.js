@@ -73,6 +73,7 @@ document.head.appendChild(styleName);
 let nameProfile = document.createElement('text');
 nameProfile.id = 'name';
 nameProfile.className = 'name';
+nameProfile.style.fontWeight = 'bold'
 nameProfile.textContent = 'Irving'
 profile.appendChild(nameProfile)
 
@@ -324,15 +325,16 @@ function sendMessage() {
 //----------FUNCION PARA GENERAR LOS NOMBRES DE USUARIOS -------------//
 function createUserContainer(usuario) {
     const userContainer = document.createElement('div')
-    userContainer.style.width = '240px'
-    userContainer.style.borderRadius = '15px'
-    userContainer.style.padding = '10px'
-    userContainer.style.marginTop = marginTopValue
-    userContainer.style.marginLeft = '10px'
+    userContainer.style.width = '235px'
+    userContainer.style.padding = '15px'
+    userContainer.style.marginTop = '5px'
+    userContainer.style.marginLeft = '15px'
+    userContainer.style.color = 'white'
+    userContainer.style.fontFamily = 'Manrope'
     userContainer.textContent = usuario
     userContainer.style.display = 'flex'
     userContainer.style.backgroundColor = '#4B527E'
-    parentContainer.appendChild(userContainer) //linea a cambiar
+    containerU.appendChild(userContainer) //linea a cambiar
   }
   
 //---------------------------------------------------//
@@ -363,7 +365,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.error('Error al obtener los posts:', error);
     }
 });
-
 
 // Función para recibir mensajes y mostrarlos en el rightContainer
 function receiveMessage(messageValue) {
@@ -399,7 +400,28 @@ async function displayMessagesFromAPI() {
         // Iterar sobre los mensajes obtenidos y mostrarlos
         posts.forEach(post => {
             if (post[1]) {
-                receiveMessage(post[1]); 
+                receiveMessage(post[2]); 
+            } else {
+                console.warn('El objeto post no contiene una propiedad en la posición 1:', post);
+            }
+        });
+
+    } catch (error) {
+        console.error('Error al obtener los mensajes desde la API:', error);
+    }
+}
+
+// Función para obtener usuarios de la API y mostrarlos en el leftContainer
+async function displayUsersFromAPI() {
+    const usuariosCreados = new Set();
+    try {
+        let posts = await optenerPosts();
+
+        // Iterar sobre los usuarios obtenidos y mostrarlos
+        posts.forEach(post => {
+            if (post[1] && !usuariosCreados.has(post[1]))  {
+                createUserContainer(post[1]); 
+                usuariosCreados.add(post[1]);
             } else {
                 console.warn('El objeto post no contiene una propiedad en la posición 1:', post);
             }
@@ -412,10 +434,16 @@ async function displayMessagesFromAPI() {
 
 
 
+// Llamada inicial a displayUsersFromAPI al cargar la página
+document.addEventListener('DOMContentLoaded', async function () {
+    await displayUsersFromAPI();
+});
+
 // Llamada inicial a displayMessagesFromAPI al cargar la página
 document.addEventListener('DOMContentLoaded', async function () {
     await displayMessagesFromAPI();
 });
+
 
 // Configurar un temporizador para actualizar los mensajes cada cierto tiempo
 const updateIntervalMinutes = 5; // Puedes ajustar este valor según tus necesidades
