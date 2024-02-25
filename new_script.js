@@ -185,12 +185,11 @@ send.style.backgroundColor = '#9290C3'
 downContainer.appendChild(send);
 send.appendChild(sendButton)
 
-
 //---------------------------------------------------//
 //----------CONFIGURACION CONTAINER LATERAL IZQUIERDO SUPERIOR-------------//
 const leftContainer = document.createElement('div')
 leftContainer.style.backgroundColor = '#1B1A55'
-leftContainer.style.height = '100%'
+leftContainer.style.height = '100%' // Set the height of leftContainer
 leftContainer.style.width = '300px'
 upperContainer.appendChild(leftContainer)
 
@@ -201,22 +200,34 @@ nameGroup.style.fontWeight = 'bold'
 nameGroup.textContent = 'CHAT'
 nameGroup.style.marginLeft = '15px'
 nameGroup.style.fontFamily = 'Manrope'
+leftContainer.appendChild(nameGroup)
+
+const containerU = document.createElement('div');
+containerU.style.backgroundColor = 'transparent';
+containerU.style.marginTop = '20px'
+containerU.style.width = '100%'
+containerU.style.height = '100%'
+containerU.id = 'scrollBar';  // Asegúrate de que el contenedor tenga el id 'scrollBar'
+containerU.style.overflowY = 'scroll';  // Aplica overflow-y: scroll directamente al contenedor
+containerU.style.overflowY = 'auto'; 
+leftContainer.appendChild(containerU)
+
+
 
 leftContainer.style.display = 'flex'
 leftContainer.style.flexDirection = 'column'
 leftContainer.style.alignItems = 'flex-start' // Align to the left
-leftContainer.appendChild(nameGroup)
+leftContainer.id = 'scrollBar';  // Asegúrate de que el contenedor tenga el id 'scrollBar'
+leftContainer.style.overflowY = 'scroll';  // Aplica overflow-y: scroll directamente al contenedor
+leftContainer.style.overflowY = 'auto'; // Hacer el contenedor scrollable
+leftContainer.style.maxHeight = '950px'; // Establecer una altura máxima fija
 
-const userContainer = document.createElement('text')
-userContainer.style.width = '240px'
-userContainer.style.borderRadius = '15px'
-userContainer.style.padding = '20px'
-userContainer.style.marginTop = '20px'
-userContainer.style.marginLeft = '10px'
-userContainer.textContent = 'MAFER'
-userContainer.style.display = 'flex'
-userContainer.style.backgroundColor = '#4B527E'
-leftContainer.appendChild(userContainer)
+
+
+
+
+
+
 
 
 
@@ -251,8 +262,11 @@ rightContainer.id = 'scrollBar';  // Asegúrate de que el contenedor tenga el id
 rightContainer.style.overflowY = 'scroll';  // Aplica overflow-y: scroll directamente al contenedor
 rightContainer.style.overflowY = 'auto'; // Hacer el contenedor scrollable
 rightContainer.style.maxHeight = '950px'; // Establecer una altura máxima fija
-
 upperContainer.appendChild(rightContainer);
+
+
+
+
 
 
 
@@ -304,14 +318,166 @@ function sendMessage() {
     rightContainer.scrollTop = rightContainer.scrollHeight;
 }
 
+
+
 //---------------------------------------------------//
 //----------FUNCION PARA GENERAR LOS NOMBRES DE USUARIOS -------------//
-function createUser (){
+function createUserContainer(usuario) {
     const userContainer = document.createElement('div')
-    userContainer.style.width = '100%'
-    userContainer.style.height = '20px'
+    userContainer.style.width = '240px'
+    userContainer.style.borderRadius = '15px'
+    userContainer.style.padding = '10px'
+    userContainer.style.marginTop = marginTopValue
+    userContainer.style.marginLeft = '10px'
+    userContainer.textContent = usuario
+    userContainer.style.display = 'flex'
     userContainer.style.backgroundColor = '#4B527E'
+    parentContainer.appendChild(userContainer) //linea a cambiar
+  }
+  
+//---------------------------------------------------//
+//--------- ASYNC AWAIT - ME PERMITE ESPERAR LA RESPUESTA DE UNA PETICION ASINCRONA--------//
+async function optenerPosts(){
+    let data = await fetch('http://uwu-guate.site:3000/messages',
+    {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })    
+    console.log("await", data);
+    let posts = await data.json();
+    console.log(posts);
 
-    leftContainer.appendChild(userContainer)
+    return posts;
+}
 
+//---------------------------------------------------//
+//------------------ MOSTRAR MENSAJES-------------------------------//
+document.addEventListener('DOMContentLoaded', async function () {
+    try {
+        let posts = await optenerPosts();
+        // Haz algo con los posts, por ejemplo, mostrarlos en la interfaz
+        console.log('Posts obtenidos:', posts);
+    } catch (error) {
+        console.error('Error al obtener los posts:', error);
+    }
+});
+
+
+// Función para recibir mensajes y mostrarlos en el rightContainer
+function receiveMessage(messageValue) {
+    let mensaje = document.createElement("div");
+    mensaje.style.backgroundColor = '#474F7A';
+    mensaje.style.display = 'inline-block';
+    mensaje.style.marginTop = '15px';
+    mensaje.style.marginRight = '20pX';
+    mensaje.style.padding = '5px';
+    mensaje.style.borderRadius = '15px';
+
+    let info = document.createElement("h4");
+    info.textContent = messageValue;
+    info.style.fontFamily = 'Manrope';
+    info.style.fontSize = "20px";
+    info.style.letterSpacing = '0.005em';
+    info.style.wordSpacing = '0.05em';
+    info.style.color = 'white';
+
+    mensaje.appendChild(info);
+
+    rightContainer.appendChild(mensaje);
+
+    // Hacer scroll hacia abajo automáticamente
+    rightContainer.scrollTop = rightContainer.scrollHeight;
+}
+
+// Función para obtener mensajes de la API y mostrarlos en el rightContainer
+async function displayMessagesFromAPI() {
+    try {
+        let posts = await optenerPosts();
+
+        // Iterar sobre los mensajes obtenidos y mostrarlos
+        posts.forEach(post => {
+            if (post[1]) {
+                receiveMessage(post[1]); 
+            } else {
+                console.warn('El objeto post no contiene una propiedad en la posición 1:', post);
+            }
+        });
+
+    } catch (error) {
+        console.error('Error al obtener los mensajes desde la API:', error);
+    }
+}
+
+
+
+// Llamada inicial a displayMessagesFromAPI al cargar la página
+document.addEventListener('DOMContentLoaded', async function () {
+    await displayMessagesFromAPI();
+});
+
+// Configurar un temporizador para actualizar los mensajes cada cierto tiempo
+const updateIntervalMinutes = 5; // Puedes ajustar este valor según tus necesidades
+setInterval(async function () {
+    await displayMessagesFromAPI();
+}, updateIntervalMinutes * 60 * 1000); // Convierte minutos a milisegundos
+
+
+
+async function sendMessage() {
+    try {
+        let mensajeValue = document.getElementById('fieldMessage').value;
+
+        // Preparar el objeto para enviar a la API
+        let newPost = {
+            id: generateId(), // Generar el ID (puedes definir tu propia lógica para esto)
+            name: "Irvs", // Nombre por defecto
+            message: mensajeValue,
+            createDate: generateCurrentDate() // Generar la fecha actual (puedes definir tu propia lógica para esto)
+        };
+
+        // Enviar el mensaje a la API
+        await sendPostToAPI(newPost);
+
+        // Mostrar el mensaje localmente
+        receiveMessage(mensajeValue);
+
+        // Limpiar el campo de mensajes
+        document.getElementById('fieldMessage').value = '';
+    } catch (error) {
+        console.error('Error al enviar o mostrar el mensaje:', error);
+    }
+}
+
+// Función para enviar el post a la API
+async function sendPostToAPI(post) {
+    try {
+        // Realizar la solicitud POST a la API
+        let response = await fetch('http://uwu-guate.site:3000/messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(post)
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al enviar el mensaje a la API');
+        }
+
+    } catch (error) {
+        console.error('Error al enviar el mensaje a la API:', error);
+    }
+}
+
+// Función para generar un ID único (puedes ajustar esto según tus necesidades)
+function generateId() {
+    return Math.floor(Math.random() * 1000); // Solo para propósitos de ejemplo, debes usar un método más robusto en un entorno real
+}
+
+// Función para generar la fecha actual en el formato deseado (puedes ajustar esto según tus necesidades)
+function generateCurrentDate() {
+    let currentDate = new Date();
+    return currentDate.toISOString();
 }
