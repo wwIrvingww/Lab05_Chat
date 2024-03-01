@@ -190,7 +190,7 @@ send.appendChild(sendButton)
 //----------CONFIGURACION CONTAINER LATERAL IZQUIERDO SUPERIOR-------------//
 const leftContainer = document.createElement('div')
 leftContainer.style.backgroundColor = '#1B1A55'
-leftContainer.style.height = '100%' // Set the height of leftContainer
+leftContainer.style.height = '100%' 
 leftContainer.style.width = '300px'
 upperContainer.appendChild(leftContainer)
 
@@ -208,8 +208,8 @@ containerU.style.backgroundColor = 'transparent';
 containerU.style.marginTop = '20px'
 containerU.style.width = '100%'
 containerU.style.height = '100%'
-containerU.id = 'scrollBar';  // Asegúrate de que el contenedor tenga el id 'scrollBar'
-containerU.style.overflowY = 'scroll';  // Aplica overflow-y: scroll directamente al contenedor
+containerU.id = 'scrollBar';  
+containerU.style.overflowY = 'scroll'; 
 containerU.style.overflowY = 'auto'; 
 leftContainer.appendChild(containerU)
 
@@ -217,12 +217,11 @@ leftContainer.appendChild(containerU)
 
 leftContainer.style.display = 'flex'
 leftContainer.style.flexDirection = 'column'
-leftContainer.style.alignItems = 'flex-start' // Align to the left
-leftContainer.id = 'scrollBar';  // Asegúrate de que el contenedor tenga el id 'scrollBar'
-leftContainer.style.overflowY = 'scroll';  // Aplica overflow-y: scroll directamente al contenedor
-leftContainer.style.overflowY = 'auto'; // Hacer el contenedor scrollable
-leftContainer.style.maxHeight = '950px'; // Establecer una altura máxima fija
-
+leftContainer.style.alignItems = 'flex-start' 
+leftContainer.id = 'scrollBar';  
+leftContainer.style.overflowY = 'scroll';  
+leftContainer.style.overflowY = 'auto'; 
+leftContainer.style.maxHeight = '950px'; 
 
 
 
@@ -259,10 +258,10 @@ rightContainer.style.flexGrow = '1';
 rightContainer.style.flexBasis = '0';
 rightContainer.style.flexDirection = 'column';
 rightContainer.style.alignItems = 'flex-end'; 
-rightContainer.id = 'scrollBar';  // Asegúrate de que el contenedor tenga el id 'scrollBar'
-rightContainer.style.overflowY = 'scroll';  // Aplica overflow-y: scroll directamente al contenedor
-rightContainer.style.overflowY = 'auto'; // Hacer el contenedor scrollable
-rightContainer.style.maxHeight = '950px'; // Establecer una altura máxima fija
+rightContainer.id = 'scrollBar';  
+rightContainer.style.overflowY = 'scroll';  
+rightContainer.style.overflowY = 'auto'; 
+rightContainer.style.maxHeight = '950px'; 
 upperContainer.appendChild(rightContainer);
 
 
@@ -300,8 +299,10 @@ function sendMessage() {
     mensaje.style.display = 'inline-block';
     mensaje.style.marginTop = '15px';
     mensaje.style.marginRight = '20pX';
-    mensaje.style.padding = '5px';
+    mensaje.style.padding = '20px';
+    mensaje.style.flex = 'column';
     mensaje.style.borderRadius = '15px';
+    
 
     let info = document.createElement("h4");
     info.textContent = mensajeValue;
@@ -392,7 +393,35 @@ function receiveMessage(messageValue) {
         imgPreview.src = messageValue;
         imgPreview.style.maxWidth = '100%';
         mensaje.appendChild(imgPreview);
-    } else {
+    }  else if (isWebLink(messageValue)) {
+    let linkPreview = document.createElement("div");
+    linkPreview.innerHTML = `<a href="${messageValue}" target="_blank">${messageValue}</a>`;
+
+    // Fetch the HTML of the page
+    fetch(messageValue)
+        .then(response => response.text())
+        .then(html => {
+            // Parse the HTML of the page
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // Extract the <meta> tags from the HTML
+            const title = doc.querySelector('meta[property="og:title"]').content;
+            const description = doc.querySelector('meta[property="og:description"]').content;
+            const image = doc.querySelector('meta[property="og:image"]').content;
+
+            // Update the <meta> tags on your page with the information from the other site
+            linkPreview.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            linkPreview.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            linkPreview.querySelector('meta[property="og:image"]').setAttribute('content', image);
+
+            // Add the linkPreview to the message
+            mensaje.appendChild(linkPreview);
+        })
+        .catch(error => console.error('Error fetching or parsing the webpage:', error));
+    }
+
+    else {
         info.textContent = messageValue;
         mensaje.appendChild(info);
     }
@@ -410,6 +439,15 @@ function isImageLink(text) {
     return imageLinkRegex.test(text);
 }
 
+// Función para verificar si una cadena es un enlace a una página web
+function isWebLink(text) {
+    console.log(text)
+    // Expresión regular para verificar si es un enlace a una página web
+    const webLinkRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+    return webLinkRegex.test(text);
+}
+
+
 
 // Función para obtener mensajes de la API y mostrarlos en el rightContainer
 async function displayMessagesFromAPI() {
@@ -418,8 +456,8 @@ async function displayMessagesFromAPI() {
 
         // Iterar sobre los mensajes obtenidos y mostrarlos
         posts.forEach(post => {
-            if (post[1]) {
-                receiveMessage(post[2]); 
+            if (post.username) {
+                receiveMessage(post.content); 
             } else {
                 console.warn('El objeto post no contiene una propiedad en la posición 1:', post);
             }
@@ -439,9 +477,9 @@ async function displayUsersFromAPI() {
 
         // Iterar sobre los usuarios obtenidos y mostrarlos
         posts.forEach(post => {
-            if (post[1] && !usuariosCreados.has(post[1]))  {
-                createUserContainer(post[1]); 
-                usuariosCreados.add(post[1]);
+            if (post.username && !usuariosCreados.has(post.username))  {
+                createUserContainer(post.username); 
+                usuariosCreados.add(post.username);
             } else {
                 console.warn('El objeto post no contiene una propiedad en la posición 1:', post);
             }
@@ -466,32 +504,28 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
 // Configurar un temporizador para actualizar los mensajes cada cierto tiempo
-const updateIntervalMinutes = 5; // Puedes ajustar este valor según tus necesidades
+const updateIntervalMinutes = 50; // Puedes ajustar este valor según tus necesidades
 setInterval(async function () {
     await displayMessagesFromAPI();
-}, updateIntervalMinutes * 60 * 1000); // Convierte minutos a milisegundos
+}, updateIntervalMinutes * 1000); 
 
 
 
 async function sendMessage() {
     try {
-        let mensajeValue = document.getElementById('fieldMessage').value;
+        const mensajeValue = document.getElementById('fieldMessage').value;
 
-        // Preparar el objeto para enviar a la API
-        let newPost = {
-            id: generateId(), // Generar el ID (puedes definir tu propia lógica para esto)
-            name: "Irvs", // Nombre por defecto
+        const newPost = {
+            id: generateId, 
+            username: "Irvs", 
             message: mensajeValue,
-            createDate: generateCurrentDate() // Generar la fecha actual (puedes definir tu propia lógica para esto)
+            createDate: generateCurrentDate() 
         };
 
-        // Enviar el mensaje a la API
         await sendPostToAPI(newPost);
 
-        // Mostrar el mensaje localmente
         receiveMessage(mensajeValue);
 
-        // Limpiar el campo de mensajes
         document.getElementById('fieldMessage').value = '';
     } catch (error) {
         console.error('Error al enviar o mostrar el mensaje:', error);
@@ -502,7 +536,8 @@ async function sendMessage() {
 async function sendPostToAPI(post) {
     try {
         // Realizar la solicitud POST a la API
-        let response = await fetch('http://uwu-guate.site:3000/messages', {
+        console.log('fetch prueba')
+        const response = await fetch('http://uwu-guate.site:3000/messages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -521,7 +556,7 @@ async function sendPostToAPI(post) {
 
 // Función para generar un ID único (puedes ajustar esto según tus necesidades)
 function generateId() {
-    return Math.floor(Math.random() * 1000); // Solo para propósitos de ejemplo, debes usar un método más robusto en un entorno real
+    return Math.floor(Math.random() * 1000).toString; // Solo para propósitos de ejemplo, debes usar un método más robusto en un entorno real
 }
 
 // Función para generar la fecha actual en el formato deseado (puedes ajustar esto según tus necesidades)
